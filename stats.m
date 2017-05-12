@@ -1,11 +1,11 @@
-american = csvread('allamerican.csv');
-asian = csvread('allasian.csv');
-european = csvread('alleuropean.csv');
+american = csvread('allamerican.csv',0,2);
+asian = csvread('allasian.csv',0,2);
+european = csvread('alleuropean.csv',0,2);
 
-numamericancars = rows(american);
-numasiancars = rows(asian);
-numeuropeancars = rows(european);
+[numamericancars_row, numamericancars_col] = size(american);
+[numasiancars_row, numasiancars_col] = size(asian);
+[numeuropeancars_row, numeuropeancars_col] = size(european);
 
-data{1} = american(1:numamericancars, 3:10);
-data{2} = asian(1:numasiancars, 3:10);
-data{3} = european(1:numeuropeancars, 3:10);
+numeuropeancars_row
+
+
