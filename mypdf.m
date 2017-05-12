@@ -1,30 +1,36 @@
 
-function mypdf (data, nregions, nfeatures, featurenames)
+function mypdf (data, nregions, nfeatures, regionnames, featurenames)
   
-  datasize = columns(data);
-  
-  for i = 1:columns
-    for j = 1:nfeatures
+  for i = 1:nfeatures
     
-    mu = mean(data{i(:,j)}); 
-    st = std(data{i(:,j)}); 
-    x = linspace(mu-3*st,mu+3*st,100);
+    figure;
     
-    subplot(j,nfeatures);
-    
-    plot(x, normpdf(x,mu,st));
+    for j = 1:nregions
+      
+      region = data{j};
+      
+      mu = mean(region(:,i)); 
+      st = std(region(:,i)); 
+      x = linspace(mu-3*st,mu+3*st,100);
+      y = normpdf(x,mu,st);
+      
+      hold on;
+      
+      plot(x,y);
+      
+    endfor
     
     [x_label, ERRMSG] = sprintf('Feature %d',i); 
     xlabel(x_label); 
     
     ylabel('Probability Density'); 
     
-    [chart_title, ERRMSG] = sprintf('Feature %d',i); 
-    title(chart_title);
+    title(featurenames{i});
     
-    legend(featurenames, "location", "northoutside", "orientation", "horizontal");
-  
-    endfor
+    legend(regionnames, "location", "northoutside", "orientation", "horizontal");
+    
+    hold off;
+    
   endfor  
 
 endfunction
