@@ -1,5 +1,5 @@
 
-function mypdf (data, nregions, nfeatures, regionnames, featurenames)
+function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureunits)
   
   exclusions = {"densityplot"};
   
@@ -22,9 +22,8 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames)
       
     endfor
     
-    [x_label, ERRMSG] = sprintf('Feature %d',i); 
-    xlabel(x_label); 
-    
+    [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i},featureunits{i}); 
+    xlabel(x_label);
     ylabel('Probability Density'); 
     
     title(featurenames{i});
