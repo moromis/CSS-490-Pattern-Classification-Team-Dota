@@ -1,6 +1,8 @@
 
 function mypdf (data, nregions, nfeatures, regionnames, featurenames)
   
+  exclusions = {"densityplot"};
+  
   for i = 1:nfeatures
     
     figure;
@@ -30,6 +32,10 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames)
     legend(regionnames, "location", "northoutside", "orientation", "horizontal");
     
     hold off;
+    
+    plotname = genvarname("densityplot", exclusions);
+    exclusions{i+1} = plotname;
+    print(plotname, "-dpng");
     
   endfor  
 
