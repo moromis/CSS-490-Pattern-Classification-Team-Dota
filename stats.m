@@ -1,4 +1,4 @@
-%clear all;
+clear all;
 
 american = csvread('allamerican.csv');
 asian = csvread('allasian.csv');
@@ -19,3 +19,5 @@ data{2} = asian(1:numasiancars, 3:10);
 data{3} = european(1:numeuropeancars, 3:10);
 
 mypdf(data, nregions, nfeatures, regionnames, featurenames, featureunits);
+
+pdfwithdots(data, nregions, nfeatures, regionnames, featurenames, featureunits);

@@ -1,7 +1,12 @@
 
 function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureunits)
   
+  clf;
+  cla;
+  
   exclusions = {"densityplot"};
+  
+  colors = {"r", "g", "c"};
   
   for i = 1:nfeatures
     
@@ -18,7 +23,7 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureuni
       
       hold on;
       
-      plot(x,y);
+      plot(x,y,colors{j});
       
     endfor
     
@@ -36,6 +41,8 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureuni
     exclusions{i+1} = plotname;
     print(plotname, "-dpng");
     
+    close;
+    
   endfor  
-
+  
 endfunction
