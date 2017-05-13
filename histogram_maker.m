@@ -10,15 +10,6 @@ function void = histogram_maker(region, feature)
   endif
   
   featureColumn = featureMatrix(:, feature + 2);
-  
-  minFeatureValue = min(featureColumn);
-  maxFeatureValue = max(featureColumn);
-  range = maxFeatureValue - minFeatureValue;
-
-#calculates the interval and x limits
-intervels = range / sqrt(length(featureColumn));
-startmid = minFeatureValue + intervels / 2;
-endmid = maxFeatureValue - intervels / 2;
 
 
 switch (region)
@@ -59,11 +50,17 @@ endswitch
 
 histogramTitle = [regionName, " ", featureName, " Histogram"];
 #displays and saves histogram
-hist(featureColumn, startmid:intervels:endmid)
-xlim([minFeatureValue maxFeatureValue])
+if(region == 1)
+  hist(featureColumn, sqrt(length(featureColumn)), 'r')
+elseif(region == 2)
+  hist(featureColumn, sqrt(length(featureColumn)), 'g')
+else
+  hist(featureColumn, sqrt(length(featureColumn)), 'c')
+endif
 title (histogramTitle);
 xlabel (unit);
 ylabel ("Frequency");
-print(histogramTitle, 'jpeg');
+plotname = genvarname(histogramTitle);
+print(plotname, "-dpng");
 
 endfunction
