@@ -11,7 +11,7 @@ function pdfwithdots (data, nregions, nfeatures, regionnames, featurenames, feat
   
   for i = 1:nfeatures
       
-      for j = 1:nregions
+      for j = 1:nregions - 1
         
         region = data{j};
         
@@ -22,7 +22,7 @@ function pdfwithdots (data, nregions, nfeatures, regionnames, featurenames, feat
 
         hold on;
         plot(x,y,colors{j});
-        plot(region(:,i),0,colors{j}, "markersize", 10);
+        plot(region(:,i),0,colors{j});
         hold off;
         
         [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i},featureunits{i}); 
