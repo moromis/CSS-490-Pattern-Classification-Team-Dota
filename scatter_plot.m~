@@ -49,13 +49,13 @@ function scatter_plot(file_name)
     figure;
     %%%%%%%%%%%%%%%%%HP
    %hp wwith fuel_tank
-   p1 = scatter(eurpean_data_max_hp, eurpean_data_fuel_t,'c');
+   scatter(eurpean_data_max_hp, eurpean_data_fuel_t,'c');
    
    hold on
-   p2 = scatter(asian_data_max_hp, asian_data_fuel_t,'g');
-   p3 = scatter(american_data_max_hp,american_data_fuel_t,'r');
+   scatter(asian_data_max_hp, asian_data_fuel_t,'g');
+   scatter(american_data_max_hp,american_data_fuel_t,'r');
   
-   legend([p1,p2,p3],'European','Asian','American')
+   legend('show','European','Asian','American');
    
 %     figure;
 %     
