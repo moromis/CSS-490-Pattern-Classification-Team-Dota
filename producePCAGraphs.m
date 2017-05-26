@@ -175,6 +175,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     zlabel(diminsionNames(1,z));
     title(strcat(titleNames(1,1), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
     %axis ([-1 1 -1 1 -1 1]);
+    hold off;
     
     plotname = genvarname('UScatterPlot', UScatterExclusions);
     UScatterExclusions{i+1} = plotname;
@@ -189,6 +190,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     hold on;
     scatter3(europeanUr(:,x), europeanUr(:,y), europeanUr(:,z), ScatterMarkerSize, 'c', '.');
     scatter3(asianUr(:,x), asianUr(:,y), asianUr(:,z), ScatterMarkerSize, 'g', '.');
+    
     xlabel(diminsionNames(1,x));
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
@@ -199,7 +201,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     UrScatterExclusions{i+1} = plotname;
     print(plotname, '-dpng');
     
-    close;
+    %close;
     
     i = i + 1;
     
