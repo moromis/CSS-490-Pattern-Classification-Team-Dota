@@ -33,7 +33,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
   %for each priniciple component wieght in S, starting with the greatest, culminate and track 
   for i = 1:nfeatures
     
-    CumSSum += S(i);
+    CumSSum = CumSSum + S(i);
     CumulativeS(i) = CumSSum;
     
   end
@@ -134,7 +134,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %-----------------------------------------------------------------------------
 
-  diminsionNames = {'PC1 ', 'PC2 ', 'PC3 ', 'PC4 ', 'PC5 '};
+  diminsionNames = {'PC1 ', 'PC2 ', 'PC3 ', 'PC4 ', 'PC5 ', 'PC6 ','PC7 ' ,'PC8 '};
   titleNames = {'U ', 'Ur '};
 
   %starting unique combination values for three of the four possible principle components  
@@ -153,16 +153,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
   %2nd, 3rd, and 5th
   %2nd, 4th, and 5th
   %3rd, 4th, and 5th
-  while(x = x+ 3)
-    
-    %increments through each unique principle component combination
-    if(z notequal 5)
-      z++;
-    elseif(y != 4)
-      y++;
-    else
-      x++;
-    endif  
+  while(x < nfeatures - 1)
     
     %plot observations for principle component combination at this point for U
     figure; 
@@ -194,8 +185,22 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
     
     close;
     
-    i++;
+    i = i + 1;
+      if(z == nFeatures)
+    if(y == nFeatures - 1)
+      x++;
+      y = x + 1;
+      z = y + 1;
+    else 
+       y++;
+       z = y + 1;
+       
+    endif
+  else
+    z++;
     
-  endwhile
+  endif
+
+  end
   
 end  

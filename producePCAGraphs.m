@@ -112,7 +112,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     grid; 
     ymin = 0; 
     ymax = max(abs(Vsquare(:,i))) + max(abs(Vsquare(:,i))/10); 
-    axis([0 nfeatures ymin ymax]); 
+    %axis([0 nfeatures ymin ymax]); 
     xlabel('Feature index'); 
     ylabel('Importance of feature'); 
     [chart_title, ERRMSG] = sprintf('Loading Vector %d',i); 
@@ -134,7 +134,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %-----------------------------------------------------------------------------
 
-  diminsionNames = {'PC1 ', 'PC2 ', 'PC3 ', 'PC4 ', 'PC5 '};
+  diminsionNames = {'PC1 ', 'PC2 ', 'PC3 ', 'PC4 ', 'PC5 ', 'PC6 ','PC7 ' ,'PC8 '};
   titleNames = {'U ', 'Ur '};
 
   %starting unique combination values for three of the four possible principle components  
@@ -153,16 +153,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
   %2nd, 3rd, and 5th
   %2nd, 4th, and 5th
   %3rd, 4th, and 5th
-  while(x ~= nfeatures - 2)
-    
-    %increments through each unique principle component combination
-    if(z ~= nfeatures)
-      z = z + 1;
-    elseif(y ~= nfeatures - 1)
-      y = y + 1;
-    else
-      x = x +1;
-    end  
+  while(x < nfeatures - 1)
     
     %plot observations for principle component combination at this point for U
     figure; 
@@ -171,7 +162,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
     title(strcat(titleNames(1,1), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
-    axis ([-1 1 -1 1 -1 1]);
+    %axis ([-1 1 -1 1 -1 1]);
     
     plotname = genvarname('UScatterPlot', UScatterExclusions);
     UScatterExclusions{i+1} = plotname;
@@ -186,7 +177,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
     title(strcat(titleNames(1,2), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
-    axis ([-1 1 -1 1 -1 1]);
+    %axis ([-1 1 -1 1 -1 1]);
     
     plotname = genvarname('UrScatterPlot', UrScatterExclusions);
     UrScatterExclusions{i+1} = plotname;
@@ -196,6 +187,21 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     
     i = i + 1;
     
+      if(z == nfeatures)
+    if(y == nfeatures - 1)
+      x = x + 1;
+      y = x + 1;
+      z = y + 1;
+    else 
+       y = y + 1;
+       z = y + 1;
+       
+    end
+  else
+    z = z + 1;
+    
+    end
+
   end
   
 end  
