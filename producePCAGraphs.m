@@ -165,7 +165,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
   while(x < nfeatures - 1)
     
     %plot observations for principle component combination at this point for U
-    figure; 
+    f1 = figure; 
     scatter3(americanU(:,x), americanU(:,y), americanU(:,z), ScatterMarkerSize, 'r', '.');
     hold on;
     scatter3(europeanU(:,x), europeanU(:,y), europeanU(:,z), ScatterMarkerSize, 'c', '.');
@@ -179,17 +179,18 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     
     plotname = genvarname('UScatterPlot', UScatterExclusions);
     UScatterExclusions{i+1} = plotname;
-    print(plotname, '-dpng');
+    %print(plotname);
+    saveas(f1,plotname);
     
     close;
     
     %plot observations for principle component combination at this point for Ur
-    figure; 
-    
+    f2 = figure; 
     scatter3(americanUr(:,x), americanUr(:,y), americanUr(:,z), ScatterMarkerSize, 'r', '.');
     hold on;
     scatter3(europeanUr(:,x), europeanUr(:,y), europeanUr(:,z), ScatterMarkerSize, 'c', '.');
     scatter3(asianUr(:,x), asianUr(:,y), asianUr(:,z), ScatterMarkerSize, 'g', '.');
+    
     
     xlabel(diminsionNames(1,x));
     ylabel(diminsionNames(1,y));
@@ -199,8 +200,8 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     
     plotname = genvarname('UrScatterPlot', UrScatterExclusions);
     UrScatterExclusions{i+1} = plotname;
-    print(plotname, '-dpng');
-    
+    %print(plotname);
+    saveas(f2,plotname);
     %close;
     
     i = i + 1;
