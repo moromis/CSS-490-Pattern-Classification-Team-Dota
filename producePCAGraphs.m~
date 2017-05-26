@@ -112,7 +112,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
     grid; 
     ymin = 0; 
     ymax = max(abs(Vsquare(:,i))) + max(abs(Vsquare(:,i))/10); 
-    axis([0 nfeatures ymin ymax]); 
+    %axis([0 nfeatures ymin ymax]); 
     xlabel('Feature index'); 
     ylabel('Importance of feature'); 
     [chart_title, ERRMSG] = sprintf('Loading Vector %d',i); 
@@ -153,6 +153,9 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
   %2nd, 3rd, and 5th
   %2nd, 4th, and 5th
   %3rd, 4th, and 5th
+  
+  americanUr = Ur(
+  
   while(x < nfeatures - 1)
     
     %plot observations for principle component combination at this point for U
@@ -162,7 +165,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
     title(strcat(titleNames(1,1), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
-    axis ([-1 1 -1 1 -1 1]);
+    %axis ([-1 1 -1 1 -1 1]);
     
     plotname = genvarname('UScatterPlot', UScatterExclusions);
     UScatterExclusions{i+1} = plotname;
@@ -172,12 +175,15 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
     
     %plot observations for principle component combination at this point for Ur
     figure; 
+    
     scatter3(Ur(:,x), Ur(:,y), Ur(:,z), ScatterMarkerSize, 'r', '.');
+    hold on
+    
     xlabel(diminsionNames(1,x));
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
     title(strcat(titleNames(1,2), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
-    axis ([-1 1 -1 1 -1 1]);
+    %axis ([-1 1 -1 1 -1 1]);
     
     plotname = genvarname('UrScatterPlot', UrScatterExclusions);
     UrScatterExclusions{i+1} = plotname;
@@ -186,20 +192,21 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
     close;
     
     i = i + 1;
-      if(z == nFeatures)
-    if(y == nFeatures - 1)
-      x++;
+    
+      if(z == nfeatures)
+    if(y == nfeatures - 1)
+      x = x + 1;
       y = x + 1;
       z = y + 1;
     else 
-       y++;
+       y = y + 1;
        z = y + 1;
        
-    endif
+    end
   else
-    z++;
+    z = z + 1;
     
-  endif
+    end
 
   end
   

@@ -13,7 +13,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
   AbsLoadingVectorExclusions = {'AbsLoadingVector'};
   
   %define the size of the markers for the scatter plots
-  ScatterMarkerSize = 225;
+  ScatterMarkerSize = 20;
   
   %-----------------------------------------------------------------------------
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -153,11 +153,23 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
   %2nd, 3rd, and 5th
   %2nd, 4th, and 5th
   %3rd, 4th, and 5th
+  
+  americanUr = Ur(1:1921,:);
+  europeanUr = Ur(1921:1921+2500,:);
+  asianUr = Ur(1921+16935:1921+2500+3342,:);
+   
+  americanU = U(1:1921,:);
+  europeanU = U(1921:1921+2500,:);
+  asianU = U(1921+2500:1921+2500+3342,:);
+  
   while(x < nfeatures - 1)
     
     %plot observations for principle component combination at this point for U
     figure; 
-    scatter3(U(:,x), U(:,y), U(:,z), ScatterMarkerSize, 'r', '.');
+    scatter3(americanU(:,x), americanU(:,y), americanU(:,z), ScatterMarkerSize, 'r', '.');
+    hold on;
+    scatter3(europeanU(:,x), europeanU(:,y), europeanU(:,z), ScatterMarkerSize, 'c', '.');
+    scatter3(asianU(:,x), asianU(:,y), asianU(:,z), ScatterMarkerSize, 'g', '.');
     xlabel(diminsionNames(1,x));
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
@@ -172,7 +184,11 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
     
     %plot observations for principle component combination at this point for Ur
     figure; 
-    scatter3(Ur(:,x), Ur(:,y), Ur(:,z), ScatterMarkerSize, 'r', '.');
+    
+    scatter3(americanUr(:,x), americanUr(:,y), americanUr(:,z), ScatterMarkerSize, 'r', '.');
+    hold on;
+    scatter3(europeanUr(:,x), europeanUr(:,y), europeanUr(:,z), ScatterMarkerSize, 'c', '.');
+    scatter3(asianUr(:,x), asianUr(:,y), asianUr(:,z), ScatterMarkerSize, 'g', '.');
     xlabel(diminsionNames(1,x));
     ylabel(diminsionNames(1,y));
     zlabel(diminsionNames(1,z));
