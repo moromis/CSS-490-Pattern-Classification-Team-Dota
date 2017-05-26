@@ -1,4 +1,4 @@
-function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples)
+function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
   
   %create an exclusions set to write unique filenames for the U scatter plots
   UScatterExclusions = {'UScatterPlot'};
