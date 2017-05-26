@@ -36,7 +36,7 @@ function [Ur, U, S, V] = prepareData(ctotal, nfeatures, nsamples)
   for i = 1:nfeatures
     
     S(i,i) = S(i,i)^2;
-    Ssum += S(i,i);
+    Ssum = Ssum + S(i,i);
     
   end
 

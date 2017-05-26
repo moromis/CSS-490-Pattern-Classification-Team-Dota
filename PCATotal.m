@@ -1,11 +1,14 @@
 clear all;
 
 %load the data
-dataset1 = csvread('allamerican.csv');
-dataset2 = csvread('alleuropean.csv');
-dataset3 = csvread('allasian.csv');
+dataset1 = csvread('allamerican.csv',1,2);
+dataset2 = csvread('alleuropean.csv',1,2);
+dataset3 = csvread('allasian.csv',1,2);
 
-dataset = cat(1, dataset1(:,3:10), dataset2(:,3:10), dataset3(:,3:10));
+%define some constants
+nfeatures = 8;
+
+dataset = cat(1, dataset1, dataset2, dataset3);
 
 %make a set of strings for the names of the axes of the scatter plots
 columnnames = {'Max Horsepower', 
@@ -19,22 +22,18 @@ columnnames = {'Max Horsepower',
 
 %get the size of the data, the number of columns is the number of features,
 %while the number of rows is the number of observations.
-datasetrows = rows(dataset);
-datasetcolumns = columns(dataset);
-
-%get rid of the label columns, we don't need them where we're going
-datasetnolabel = dataset(2:datasetrows, 2:datasetcolumns); 
+[datasetrows, datasetcolumns] = size(dataset);
 
 %produce some 2D scatter plots before we do PCA -- we also compute a covariance
 %matrix, a correlation matrix, and a means vector while we have our unprocessed
 %original space data.
-[covmatrix, corrmatrix, means] = produce2DGraphs(datasetnolabel, datasetcolumns - 1, datasetrows - 1, columnnames);
+%[covmatrix, corrmatrix, means] = produce2DGraphs(datasetnolabel, datasetcolumns, datasetrows, columnnames);
 
 %preprocess the data (mean center and scale)
-[Ur, U, S, V] = prepareData(datasetnolabel, datasetcolumns - 1, datasetrows - 1);
+[Ur, U, S, V] = prepareData(dataset, datasetcolumns, datasetrows);
 
 %produce the scree plots, loading vectors, and 3D PC scatter plots
-producePCAGraphs(Ur, U, S, V, datasetcolumns - 1, datasetrows - 1);
+producePCAGraphs(Ur, U, S, V, datasetcolumns, datasetrows);
 
 % %reduce the dimensions of the data
 % reduceddata = datasetnolabel(:,1:3);
