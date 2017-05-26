@@ -1,18 +1,12 @@
-%preforms singular value decomposition 
+%preforms singular value decomposition on Iris observations
 %and graphs three types of plots for Principle Component Analysis
-%assumes that all files are within directory
-
-pkg load io
+%assumes that iris.mat, mysvd.m, and pca.m are within directory
 
 %clears the command history
 clear all;
 
 %loads flower observations into three matrices for each flower type: setosa, virginica, and versicolor
-countryDataWithBadData = csvread('alleuropean.csv');
-
-countryData = countryDataWithBadData(:, 3:10);
-
-save hw3.mat countryData
+load('iris.mat');
 
 %-------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,84 +19,52 @@ save hw3.mat countryData
 %define constants
 
 %this is the original number of columns representing original features, two for petal and two for sepal
-nFeatures = columns(countryData);
+nfeatures = 4;
 
-nObservations = rows(countryData);
+%we will use the fifth column for the flower type
+%0 = setosa
+%1 = virginica
+%2 = versicolor
+flowertypecolumn = 5;
+
+%the total number of flowers, which is the sum of each flower types
+nsamples = 150;
+
+%the number of samples in one flower type
+oneflower = 50;  
 
 
 %-----------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%      Covariance Matrix      %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%            SETUP            %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----------------------------------------------------------------------------
 
-meanVector = mean(countryData);
-
-
-for i = 1:nFeatures
-  for j = 1:nFeatures
-    covarianceMatrix(i,j) = cov(countryData(:,i), countryData(:,j));
-    correlationMatrix(i,j) = corr(countryData(:,i), countryData(:,j));
-  endfor
-endfor
-
-save -append hw3.mat meanVector covarianceMatrix correlationMatrix
-
-%-----------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%      2D SCATTER PLOTS       %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%-----------------------------------------------------------------------------
-
-
-
-%plot and save 2D scatter plots for each possible unique combination of 2 features 
-i = 1;
-while(i != 5)
-  j = i + 1;
+%add a column to all the flowers to indicate what type it is
+%as noted before:
+%0 = setosa
+%1 = virginica
+%2 = versicolor
+%additionally, add a number in another column with a random number so we can
+%simply sort the flowers by that column and select the first 'randomsamples' samples
+for i = 1:oneflower
+    
+  setosa(i,flowertypecolumn) = 0;
+  %setosa(i,randnumbercolumn) = rand*nsamples;
+   
+  virginica(i,flowertypecolumn) = 1;
+  %virginica(i,randnumbercolumn) = rand*nsamples;
+    
+  versicolor(i,flowertypecolumn) = 2;
+  %versicolor(i,randnumbercolumn) = rand*nsamples;
   
-  switch (i)
-  case 1
-    xFeatureName = "Liquor Consumtion";
-  case 2
-     xFeatureName = "Wine Consumption";
-  case 3
-     xFeatureName = "Beer Consumption";
-  case 4
-     xFeatureName = "Life Expectancy";
-  case 5
-     xFeatureName = "Heart Disease Rate";
-  endswitch
-  while(j != 6)
+end
   
-  switch (j)
-  case 1
-    yFeatureName = "Liquor Consumtion";
-  case 2
-     yFeatureName = "Wine Consumption";
-  case 3
-     yFeatureName = "Beer Consumption";
-  case 4
-     yFeatureName = "Life Expectancy";
-  case 5
-     yFeatureName = "Heart Disease Rate";
-  endswitch
- 
-    plotName = [xFeatureName " vs " yFeatureName];
-    p = plot(countryData(:,i), countryData(:,j), 'o');
-    xlabel (xFeatureName);
-    ylabel (yFeatureName);
-    title(plotName);
-    print(plotName, "-dpng");
-    j++;
-  endwhile
-  i++;
-endwhile
-
+  
+%concatenate all the flowers into one matrix
+allflowers = cat(1, setosa, virginica, versicolor);
 
 
 %-----------------------------------------------------------------------------
@@ -114,7 +76,7 @@ endwhile
 %-----------------------------------------------------------------------------
 
 %prepares the data by centering and scaling data
-X = prepareData(countryData, nFeatures, nObservations);
+X = prepareData(allflowers(1:nsamples, 1:nfeatures), nfeatures, nsamples);
 
 %-----------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,6 +88,7 @@ X = prepareData(countryData, nFeatures, nObservations);
   
 %run svd to calculate scores matrix U, covariance matrix (diagonal) S, and loading matrix V
 [U, S, V] = svd(X, 0);
+
 
 
 %-----------------------------------------------------------------------------
@@ -141,30 +104,30 @@ X = prepareData(countryData, nFeatures, nObservations);
 Ssum = 0;
 
 %square each element in the matrix and concurrently add it to the sum of S
-for i = 1:nFeatures
+for i = 1:4
   
   S(i,i) = S(i,i)^2;
   Ssum += S(i,i);
   
-endfor
+end
 
 %now that the sum has of S has been calculated, 
 %normalize each element in S by divideding it by the sum of S, 
 %so that each element is a fraction of the sum total sum add they culminate to 1 
-for i = 1:nFeatures
+for i = 1:4
   
   S(i,i) = S(i,i) / Ssum;
   
-endfor
+end
 
 %calculates Ur after normalizing S
 Ur = U * S;
 
-save -append hw3.mat U V S
-
 %makes S a row vector with all diagonal values, and transposes it into a column vector
 S = sum(S);
 S = transpose(S);
+
+
 
 %-----------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -178,12 +141,12 @@ S = transpose(S);
 CumSSum = 0;
 
 %for each priniciple component wieght in S, starting with the greatest, culminate and track 
-for i = 1:nFeatures
+for i = 1:nfeatures
   
   CumSSum += S(i);
   CumulativeS(i) = CumSSum;
   
-endfor
+end
 
 %graphing scree plots 
 %scree plot from S
@@ -191,14 +154,12 @@ figure;
 plot(S,'x:b'); 
 grid; 
 title('Scree Plot');
-print('Scree Plot', "-dpng");
 
 %culminative scree plot from culmination tracking
 figure; 
 plot(CumulativeS,'x:r'); 
 grid; 
 title('Scree Plot Cummulative');
-print('Scree Plot Cummulative', "-dpng");
 
 %-----------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -209,8 +170,8 @@ print('Scree Plot Cummulative', "-dpng");
 %-----------------------------------------------------------------------------
 
 %square each element in V and assigns each element to the absolute value of itself
-for i=1:nFeatures 
-    for j=1:nFeatures 
+for i=1:nfeatures 
+    for j=1:nfeatures 
         Vsquare(i,j) = V(i,j)^2; 
         if V(i,j)<0 
             Vsquare(i,j) = Vsquare(i,j)*-1; 
@@ -221,24 +182,18 @@ for i=1:nFeatures
 end
 
 %graph loading vectors from V
-for i = 1:nFeatures
+for i = 1:nfeatures
   figure; 
   bar(Vsquare(:,i),0.5); 
   grid; 
   ymin = min(Vsquare(:,i)) + (min(Vsquare(:,i))/10); 
   ymax = max(Vsquare(:,i)) + (max(Vsquare(:,i))/10); 
-  axis([0 nFeatures ymin ymax]); 
+  axis([0 nfeatures ymin ymax]); 
   xlabel('Feature index'); 
   ylabel('Importance of feature'); 
   [chart_title, ERRMSG] = sprintf('Loading Vector %d',i); 
   title(chart_title);
-  print(chart_title, "-dpng");
-endfor
-
-
-%{
-
-
+end
 
 %-----------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -248,11 +203,24 @@ endfor
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----------------------------------------------------------------------------
 
+%gets each of the classes from U
+%class1 for Setosa, Class2 for virginica, and class3 for versicolor
+uClass1 = U(1:50, 1:4);
+uClass2 = U(51:100, 1:4);
+uClass3 = U(101:150, 1:4);
+
+urClass1 = Ur(1:50, 1:4);
+urClass2 = Ur(51:100, 1:4);
+urClass3 = Ur(101:150, 1:4);
+
+
+diminsionNames = {'PC1 ', 'PC2 ', 'PC3 ', 'PC4 '};
+titleNames = {'U ', 'Ur '}
 
 %starting unique combination values for three of the four possible principle components  
 x = 1;
 y = 2;
-z = 3;
+z = 2;
 
 %loops through each unique combination of three of the four possible priniciple components 
 %for plotting observations using three of the principle components for each unique combination
@@ -261,130 +229,52 @@ z = 3;
 %1st, 2nd, and 4th principle components
 %1st, 3rd, and 4th principle components
 %2nd, 3rd, and 4th principle componets
-
-
-while(x < nFeatures - 1)
-
-  switch (x)
-  case 1
-    xPC = "PC1";
-    xFeatureName = "Liquor Consumtion";
-  case 2
-    xPC = "PC2";
-    xFeatureName = "Wine Consumption";
-
-  case 3
-    xPC = "PC3";
-    xFeatureName = "Beer Consumption";
-
-  case 4
-    xPC = "PC4";
-    xFeatureName = "Life Expectancy";
-
-  case 5
-    xPC = "PC5";
-    xFeatureName = "Heart Disease Rate";
-
-  endswitch
+while(x != 2)
   
-  switch (y)
-  case 1
-    yPC = "PC1";
-    yFeatureName = "Liquor Consumtion";
-  case 2
-    yPC = "PC2";
-    yFeatureName = "Wine Consumption";
-
-  case 3
-    yPC = "PC3";
-    yFeatureName = "Beer Consumption";
-
-  case 4
-    yPC = "PC4";
-    yFeatureName = "Life Expectancy";
-
-  case 5
-    yPC = "PC5";
-    yFeatureName = "Heart Disease Rate";
-
-  endswitch
-  
-  switch (z)
-  case 1
-    zPC = "PC1";
-    zFeatureName = "Liquor Consumtion";
-  case 2
-    zPC = "PC2";
-    zFeatureName = "Wine Consumption";
-
-  case 3
-    zPC = "PC3";
-    zFeatureName = "Beer Consumption";
-
-  case 4
-    zPC = "PC4";
-    zFeatureName = "Life Expectancy";
-
-  case 5
-    zPC = "PC5";
-    zFeatureName = "Heart Disease Rate";
-
-  endswitch
-      
+  %increments through each unique principle component combination
+  if(z !=4)
+    z++;
+  elseif(y != 3)
+    y++;
+  else
+    x++;
+  endif  
   
   %plot observations for principle component combination at this point for U
   figure; 
-  plotName = ["U " xPC " vs " yPC " vs " zPC];
-  scatter3(U(:,x), U(:,y), U(:,z), 'x'); 
-  axis([-1 1 -1 1 -1 1]);
+  scatter3(uClass1(:,x), uClass1(:,y), uClass1(:,z), 'r', '^'); 
   hold on; 
-  xlabel(xPC);
-  ylabel(yPC);
-  zlabel(zPC);
-  title(plotName);
-  print(plotName, "-dpng");
+  scatter3(uClass2(:,x), uClass2(:,y), uClass2(:,z), 'b', '*'); 
+  scatter3(uClass3(:,x), uClass3(:,y), uClass3(:,z), 'g');
+  legend('Setosa', 'Virginica', 'Versicolor');
+  xlabel(diminsionNames(1,x));
+  ylabel(diminsionNames(1,y));
+  zlabel(diminsionNames(1,z));
+  title(strcat(titleNames(1,1), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
   
   %plot observations for principle component combination at this point for Ur
   figure; 
-  plotName = ["Ur " xPC " vs " yPC " vs " zPC];
-  scatter3(Ur(:,x), Ur(:,y), Ur(:,z), "x"); 
-  axis([-1 1 -1 1 -1 1]);
+  scatter3(urClass1(:,x), urClass1(:,y), urClass1(:,z), 'r', '^'); 
   hold on; 
-  xlabel(xPC);
-  ylabel(yPC);
-  zlabel(zPC);
-  title(plotName);
-  print(plotName, "-dpng");
-  
-   %plot observations for principle component combination at this point for U
-  figure; 
-  plotName = [ xFeatureName " vs " yFeatureName " vs " zFeatureName];
-  scatter3(countryData(:,x), countryData(:,y), countryData(:,z), 'x'); 
-  hold on; 
-  xlabel(xFeatureName);
-  ylabel(yFeatureName);
-  zlabel(zFeatureName);
-  title(plotName);
-  print(plotName, "-dpng");
-  
-  
-  if(z == nFeatures)
-    if(y == nFeatures - 1)
-      x++;
-      y = x + 1;
-      z = y + 1;
-    else 
-       y++;
-       z = y + 1;
-       
-    endif
-  else
-    z++;
-    
-  endif
+  scatter3(urClass2(:,x), urClass2(:,y), urClass2(:,z), 'b', '*'); 
+  scatter3(urClass3(:,x), urClass3(:,y), urClass3(:,z), 'g');
+  legend('Setosa', 'Virginica', 'Versicolor');
+  xlabel(diminsionNames(1,x));
+  ylabel(diminsionNames(1,y));
+  zlabel(diminsionNames(1,z));
+  title(strcat(titleNames(1,2), diminsionNames(1,x), diminsionNames(1,y), diminsionNames(1,z)));
   
 endwhile
 
 
-%}
-
+%plot observations for principle component combination at this point for Ur
+figure; 
+scatter3(setosa(:,1), setosa(:,3), setosa(:,4), 'r', '^'); 
+hold on; 
+scatter3(virginica(:,1), virginica(:,3), virginica(:,4), 'b', '*'); 
+scatter3(versicolor(:,1), versicolor(:,3), versicolor(:,4), 'g');
+legend('Setosa', 'Virginica', 'Versicolor');
+xlabel('petal width');
+ylabel('sepal width');
+zlabel('sepal length');
+title('After PCA');
