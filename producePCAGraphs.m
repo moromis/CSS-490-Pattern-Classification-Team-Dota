@@ -156,7 +156,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
   
   americanUr = Ur(1:1921,:);
   europeanUr = Ur(1921:1921+2500,:);
-  asianUr = Ur(1921+16935:1921+2500+3342,:);
+  asianUr = Ur(1921+2500:1921+2500+3342,:);
    
   americanU = U(1:1921,:);
   europeanU = U(1921:1921+2500,:);
@@ -202,7 +202,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames)
     UrScatterExclusions{i+1} = plotname;
     %print(plotname);
     saveas(f2,plotname);
-    %close;
+    close;
     
     i = i + 1;
     
