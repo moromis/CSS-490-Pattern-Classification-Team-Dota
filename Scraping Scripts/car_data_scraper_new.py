@@ -23,6 +23,7 @@ fieldnames = [
     'Maximum power - Output - Horsepower ','Maximum torque ',\
     'Fuel Tank Capacity ', 'Curb Weight ','Top Speed ',\
     'Length ','Width ','Height ',\
+	'Drive wheels - Traction - Drivetrain '\
 
     ]
 #this program current skips the first row of data
@@ -54,117 +55,7 @@ def make_dictionary(list_of_specs):
         temp_dict[fieldnames[i]] = list_of_specs[i]
     return temp_dict
 
-def scrape_specs(url):
-    r = requests.get(url)
-    s = BeautifulSoup(r.text,'html5lib')
-    #fetch the left column data
-    left_column_data = s.find('div',{'class':'ficha_specs_left'})
 
-
-    right_column_data = s.find('div',{'class':'ficha_specs_right'})
-
-
-    #work on left column first(extract data from it)
-    #get three main secions 0: Technical Data
-    #                       1: 1 Emissions and Range
-    left_data_row = left_column_data.find_all('table')
-
-
-
-
-    #scrap Tecnical data
-    data = list(left_data_row[0].children)
-    data = data[1].find_all('tr')
-
-
-    data_list = list()
-    #access index to get data
-
-
-
-    #[2] engine Type
-    engine_t = data[2].find_all('td')[1].text
-    #print(engine_t)
-    data_list.append(engine_t)
-    #seems its in increments of 2 each row of data or item
-
-    #[6] Fuel Type
-    fuel_t = _getDataHelper(data[6])
-    data_list.append(fuel_t)
-
-    #[8] Fuel System
-    fuel_sys = data[8].find_all('td')[1].text
-    #print(fuel_sys)
-    data_list.append(fuel_sys)
-
-    #[12] Engine position
-    engine_pos = _getDataHelper(data[12])
-    data_list.append(engine_pos)
-
-    #[14] Engine size
-    engine_s = _getDataHelper(data[14])
-    data_list.append(engine_s)
-
-    #[18] Num values
-    valves_num = _getDataHelper(data[18])
-    data_list.append(valves_num)
-
-    #[24] MAX horse power
-    max_hp = _getDataHelper(data[24])
-    data_list.append(max_hp)
-    #[26] MAX TOurqe
-    max_tq = _getDataHelper(data[26])
-    data_list.append(max_tq)
-
-    
-    ######scrap Emissions data######
-    data = list(left_data_row[1].children)
-    data = data[1].find_all('tr')
-
-    #[3] FUEL Consumption City
-    fuel_comp = _getDataHelper(data[3])
-    data_list.append(fuel_comp)
-
-
-
-    ##### scrap the Right column
-
-
-    #work on left column first(extract data from it)
-    #get three main secions 0: Technical Data
-    #                       1: 1 Emissions and Range
-    right_data_row = right_column_data.find_all('table')
-
-
-    data = list(right_data_row[0].children)
-    data = data[1].find_all('tr')
-    
-    #scrap Performance
-    #[2] TOP speed
-    top_spd = _getDataHelper(data[2])
-    data_list.append(top_spd)
-
-
-    ##### SCrape Dimensions row
-    
-    data = list(right_data_row[1].children)
-    data = data[1].find_all('tr')
-
-    #[8] LENGTH
-    leng = _getDataHelper(data[8])
-    data_list.append(leng)
-    #[10] WIDTH
-    wid = _getDataHelper(data[10])
-    data_list.append(wid)
-    #[12] HEIGHT
-    heigh = _getDataHelper(data[12])
-    data_list.append(heigh)
-    #[18] SEATS
-    seats = _getDataHelper(data[18])
-    data_list.append(seats)
-
-    #return a list of data items
-    return data_list
         
 def _getDataHelper(data):
     

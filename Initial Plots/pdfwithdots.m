@@ -1,44 +1,46 @@
 
 function pdfwithdots (data, nregions, nfeatures, regionnames, featurenames, featureunits)
 
-  clf;
-  cla;
-
-  exclusions = {"densityplotwithdotdiagram"};
+  exclusions = {'densityplotwithdotdiagram'};
   
-  colors = {"r", "g", "c"};
+  colors = {'r', 'g', 'c'};
   
   
-  for i = 1:nfeatures
+  for i = 2:nfeatures + 1
       
-      for j = 1:nregions - 1
+      for j = 1:nregions
         
-        region = data{j};
+        type = data{j};
         
-        mu = mean(region(:,i)); 
-        st = std(region(:,i)); 
+        mu = mean(type(:,i)); 
+        st = std(type(:,i)); 
         x = linspace(mu-3*st,mu+3*st,100);
         y = normpdf(x,mu,st);
 
         hold on;
+        
         plot(x,y,colors{j});
-        plot(region(:,i),0,colors{j});
+        
+        plot(type(:,i),0,colors{j});
+        
         hold off;
         
-        [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i},featureunits{i}); 
+        [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i + 1},featureunits{i + 1}); 
         xlabel(x_label);
         ylabel('Probability Density'); 
         
-        title(featurenames{i});
+        title(featurenames{i - 1});
         
-        plotname = genvarname("densityplotwithdotdiagram", exclusions);
-        exclusions{i+1} = plotname;
-        print(plotname, "-dpng");
+        legend(regionnames, 'location', 'northoutside', 'orientation', 'horizontal');
+        
+        plotname = genvarname('densityplotwithdotdiagram', exclusions);
+        exclusions{i} = plotname;
+        print(plotname, '-dpng');
         
         close;
         
-      endfor
-    endfor  
+      end
+    end  
         
 
-endfunction
+end

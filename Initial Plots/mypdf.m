@@ -1,23 +1,20 @@
 
 function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureunits)
   
-  clf;
-  cla;
+  exclusions = {'densityplot'};
   
-  exclusions = {"densityplot"};
+  colors = {'r', 'g', 'c'};
   
-  colors = {"r", "g", "c"};
-  
-  for i = 1:nfeatures
+  for i = 2:nfeatures + 1
     
     figure;
     
     for j = 1:nregions
       
-      region = data{j};
+      type = data{j};
       
-      mu = mean(region(:,i)); 
-      st = std(region(:,i)); 
+      mu = mean(type(:,i)); 
+      st = std(type(:,i)); 
       x = linspace(mu-3*st,mu+3*st,100);
       y = normpdf(x,mu,st);
       
@@ -25,24 +22,24 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureuni
       
       plot(x,y,colors{j});
       
-    endfor
+    end
     
-    [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i},featureunits{i}); 
+    [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i - 1},featureunits{i - 1}); 
     xlabel(x_label);
     ylabel('Probability Density'); 
     
-    title(featurenames{i});
+    title(featurenames{i - 1});
     
-    legend(regionnames, "location", "northoutside", "orientation", "horizontal");
+    legend(regionnames, 'location', 'northoutside', 'orientation', 'horizontal');
     
     hold off;
     
-    plotname = genvarname("densityplot", exclusions);
-    exclusions{i+1} = plotname;
-    print(plotname, "-dpng");
+    plotname = genvarname('densityplot', exclusions);
+    exclusions{i} = plotname;
+    print(plotname, '-dpng');
     
     close;
     
-  endfor  
+  end  
   
-endfunction
+end

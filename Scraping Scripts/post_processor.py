@@ -7,6 +7,7 @@ def get_data_files():
     x = glob.glob('*.csv')
     #x = os.listdir('C:\\Users\\MugenKlaus\\Desktop\\santitaziaiton test\\datafiles')
     #x = os.listdir()
+    #x = ['ACURA_specs_data.csv']
     return x
     
 def start():
@@ -24,7 +25,7 @@ def start():
         #newfileName = "%s\\cleaned_%s.csv" % (prefix,name)
 
         #this is the file for creating the new post-processed file
-        newFileName = "pre_processed_files\\cleaned_%s.csv" % name
+        newFileName = "pre_processed_files/cleaned_%s.csv" % name
 
         newf = open(newFileName,'w',newline='')
         number_of_bad_data_rows = 0
@@ -93,6 +94,7 @@ def s(data_list):
         #height INCHES
         height_ = re.compile('cmor (\d+\.\d*|\d+) inches')
         height_d = height_.findall(data_list[9])[0].replace(' ','')
+
         x.append(Model)
         x.append(fuelType)
         x.append(bhp_d)
@@ -102,7 +104,8 @@ def s(data_list):
         x.append(topS_d)
         x.append(leth_d)
         x.append(wid_d)
-        x.append(height_d)
+        x.append(height_d) 
+        x.append(data_list[10])
         #print(x)
     except Exception as e:
         error = True

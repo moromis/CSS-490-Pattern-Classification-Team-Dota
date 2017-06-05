@@ -1,66 +1,60 @@
-function void = histogram_maker(region, feature)
+function histogram_maker(type, feature, matrix)
 
-
-  if(region == 1)
-    featureMatrix = csvread('allamerican.csv');
-  elseif(region == 2)
-    featureMatrix = csvread('allasian.csv');
-  else
-    featureMatrix = csvread('alleuropean.csv');
-  endif
+    featureMatrix = matrix;
   
   featureColumn = featureMatrix(:, feature + 2);
 
 
-switch (region)
+switch (type)
   case 1
-    regionName = "American";
+    type = 'AWD';
   case 2
-     regionName = "Asian";
+     regionName = 'FWD';
   otherwise
-     regionName = "European";
-endswitch
+     regionName = 'RWD';
+end
 
 switch (feature)
   case 1
-    featureName = "Maximum Horsepower";
-    unit = "Brake Horse Power";
+    featureName = 'Maximum Horsepower';
+    unit = 'Brake Horse Power';
   case 2
-     featureName = "Maximum Torque";
-     unit = "lb/ft";
+     featureName = 'Maximum Torque';
+     unit = 'lb/ft';
   case 3
-     featureName = "Fuel Tank Capacity";
-     unit = "Gallons";
+     featureName = 'Fuel Tank Capacity';
+     unit = 'Gallons';
   case 4
-     featureName = "Curb Weight";
-     unit = "lbs";
+     featureName = 'Curb Weight';
+     unit = 'lbs';
   case 5
-     featureName = "Top Speed";
-     unit = "MPH";
+     featureName = 'Top Speed';
+     unit = 'MPH';
   case 6
-     featureName = "Length";
-     unit = "Inches";
+     featureName = 'Length';
+     unit = 'Inches';
   case 7
-     featureName = "Width";    
-     unit = "Inches";
+     featureName = 'Width';    
+     unit = 'Inches';
   otherwise
-     featureName = "Height";
-     unit = "Inches";
-endswitch
+     featureName = 'Height';
+     unit = 'Inches';
+end
 
-histogramTitle = [regionName, " ", featureName, " Histogram"];
-#displays and saves histogram
+histogramTitle = [regionName, ' ', featureName, ' Histogram'];
+%displays and saves histogram
 if(region == 1)
   hist(featureColumn, sqrt(length(featureColumn)), 'r')
 elseif(region == 2)
   hist(featureColumn, sqrt(length(featureColumn)), 'g')
 else
   hist(featureColumn, sqrt(length(featureColumn)), 'c')
-endif
+end
+
 title (histogramTitle);
 xlabel (unit);
-ylabel ("Frequency");
+ylabel ('Frequency');
 plotname = genvarname(histogramTitle);
-print(plotname, "-dpng");
+print(plotname, '-dpng');
 
 endfunction
