@@ -1,9 +1,11 @@
 
 function pdfwithdots (data, nregions, nfeatures, typenames, featurenames, featureunits)
-
-  exclusions = {'densityplotwithdotdiagram'};
   
   colors = {'r', 'g', 'c'};
+  
+  exclusions = {'densityplotwithdotdiagram_AWD','densityplotwithdotdiagram_FWD','densityplotwithdotdiagram_RWD'};
+  
+  exclusioncount = 4;
  
     for i = 2:nfeatures + 1
       
@@ -33,8 +35,11 @@ function pdfwithdots (data, nregions, nfeatures, typenames, featurenames, featur
         [printtitle, ~] = sprintf('%s - %s',featurenames{i - 1},typenames{j});
         title(printtitle);
         
-        plotname = genvarname('densityplotwithdotdiagram', exclusions);
-        exclusions{i} = plotname;
+        [s, ~] = sprintf('densityplotwithdotdiagram_%s', typenames{j});
+        
+        plotname = genvarname(s, exclusions);
+        exclusions{exclusioncount} = plotname;
+        exclusioncount = exclusioncount + 1;
         print(plotname, '-dpng');
         
         close;

@@ -1,5 +1,5 @@
 
-function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureunits)
+function mypdf (data, ntypes, nfeatures, typenames, featurenames, featureunits)
   
   exclusions = {'densityplot'};
   
@@ -9,7 +9,7 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureuni
     
     figure;
     
-    for j = 1:nregions
+    for j = 1:ntypes
       
       type = data{j};
       
@@ -30,7 +30,7 @@ function mypdf (data, nregions, nfeatures, regionnames, featurenames, featureuni
     
     title(featurenames{i - 1});
     
-    legend(regionnames, 'location', 'northoutside', 'orientation', 'horizontal');
+    legend(typenames, 'location', 'northoutside', 'orientation', 'horizontal');
     
     hold off;
     

@@ -37,8 +37,11 @@ data{1} = AWD;
 data{2} = FWD;
 data{3} = RWD;
 
+%plot scatter plots for all features
+%scatters(data, ntypes, nfeatures, typenames, featurenames, featureunits);
+
 %plot and print PDFs for the datasets
-mypdf(data, ntypes, nfeatures, typenames, featurenames, featureunits);
+%mypdf(data, ntypes, nfeatures, typenames, featurenames, featureunits);
 
 %plot and print PDFs with dot diagrams at the bottom
 pdfwithdots(data, ntypes, nfeatures, typenames, featurenames, featureunits);
