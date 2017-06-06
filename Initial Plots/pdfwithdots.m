@@ -1,12 +1,11 @@
 
-function pdfwithdots (data, nregions, nfeatures, regionnames, featurenames, featureunits)
+function pdfwithdots (data, nregions, nfeatures, typenames, featurenames, featureunits)
 
   exclusions = {'densityplotwithdotdiagram'};
   
   colors = {'r', 'g', 'c'};
-  
-  
-  for i = 2:nfeatures + 1
+ 
+    for i = 2:nfeatures + 1
       
       for j = 1:nregions
         
@@ -21,17 +20,18 @@ function pdfwithdots (data, nregions, nfeatures, regionnames, featurenames, feat
         
         plot(x,y,colors{j});
         
-        plot(type(:,i),0,colors{j});
+        zs = zeros(size(type,1), 1);
+        
+        scatter(type(:,i),zs,50,'.',colors{j});
         
         hold off;
         
-        [x_label, ERRMSG] = sprintf('%s (%s)',featurenames{i + 1},featureunits{i + 1}); 
+        [x_label, ~] = sprintf('%s (%s)',featurenames{i - 1},featureunits{i - 1}); 
         xlabel(x_label);
         ylabel('Probability Density'); 
         
-        title(featurenames{i - 1});
-        
-        legend(regionnames, 'location', 'northoutside', 'orientation', 'horizontal');
+        [printtitle, ~] = sprintf('%s - %s',featurenames{i - 1},typenames{j});
+        title(printtitle);
         
         plotname = genvarname('densityplotwithdotdiagram', exclusions);
         exclusions{i} = plotname;
@@ -40,6 +40,7 @@ function pdfwithdots (data, nregions, nfeatures, regionnames, featurenames, feat
         close;
         
       end
+      
     end  
         
 

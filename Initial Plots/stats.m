@@ -30,7 +30,7 @@ ntypes = 3;
 %define some arrays to name plots and their axes and legends
 typenames = { 'AWD', 'FWD', 'RWD' };
 featurenames = { 'Horsepower', 'Maximum Torque', 'Fuel Tank Capacity', 'Curb Weight', 'Top Speed', 'Length', 'Width', 'Height' };
-featureunits = { 'BHP', 'lb/ft', 'US gallons', 'lbs', 'MPH', 'inches', 'inches', 'inches' };
+featureunits = { 'BHP', 'lb/f', 'US gallons', 'lbs', 'MPH', 'inches', 'inches', 'inches' };
 
 %put all three datasets into a cell matrix, so we can iterate through them
 data{1} = AWD;
@@ -38,7 +38,7 @@ data{2} = FWD;
 data{3} = RWD;
 
 %plot and print PDFs for the datasets
-mypdf(data, ntypes, nfeatures, typenames, featurenames, featureunits);
+%mypdf(data, ntypes, nfeatures, typenames, featurenames, featureunits);
 
 %plot and print PDFs with dot diagrams at the bottom
 pdfwithdots(data, ntypes, nfeatures, typenames, featurenames, featureunits);
