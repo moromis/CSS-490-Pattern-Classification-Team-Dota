@@ -1,29 +1,30 @@
 clear all;
 
 %load the data
-dataset1 = csvread('allamerican.csv',1,2);
-dataset2 = csvread('alleuropean.csv',1,2);
-dataset3 = csvread('allasian.csv',1,2);
-
-dataset2 = sortrows(dataset2, 9);
-dataset2 = dataset2(1:2500,1:8);
-
+datasetwithtag = csvread('all_numeric.csv');
 
 %define some constants
 nfeatures = 8;
+datasetsize = size(datasetwithtag,1);
 
-dataset = cat(1, dataset1, dataset2, dataset3);
+dataset = datasetwithtag(1:datasetsize, 2:nfeatures + 1);
 
+AWDfind = datasetwithtag(:,1) == 0;
+FWDfind = datasetwithtag(:,1) == 1;
+RWDfind = datasetwithtag(:,1) == 2;
+
+AWD = datasetwithtag(AWDfind,:);
+
+FWD = datasetwithtag(FWDfind,:);
+
+RWD = datasetwithtag(RWDfind,:);
+
+sizes(1) = size(AWD, 1);
+sizes(2) = size(FWD, 1);
+sizes(3) = size(RWD, 1);
 
 %make a set of strings for the names of the axes of the scatter plots
-columnnames = {'Max Horsepower', 
-                'Max Torque', 
-                'Fuel Tank Capacity', 
-                'Curb Weight', 
-                'Top Speed',
-                'Length',
-                'Width',
-                'Height'};
+columnnames = {'Max Horsepower','Max Torque','Fuel Tank Capacity','Curb Weight','Top Speed','Length','Width','Height'};
 
 %get the size of the data, the number of columns is the number of features,
 %while the number of rows is the number of observations.
@@ -32,13 +33,13 @@ columnnames = {'Max Horsepower',
 %produce some 2D scatter plots before we do PCA -- we also compute a covariance
 %matrix, a correlation matrix, and a means vector while we have our unprocessed
 %original space data.
-%[covmatrix, corrmatrix, means] = produce2DGraphs(datasetnolabel, datasetcolumns, datasetrows, columnnames);
+[covmatrix, corrmatrix, means] = produce2DGraphs(dataset, datasetcolumns, datasetrows, columnnames);
 
 %preprocess the data (mean center and scale)
 [Ur, U, S, V] = prepareData(dataset, datasetcolumns, datasetrows);
 
 %produce the scree plots, loading vectors, and 3D PC scatter plots
-producePCAGraphs(Ur, U, S, V, datasetcolumns, datasetrows);
+producePCAGraphs(Ur, U, S, V, datasetcolumns, datasetrows, columnnames, sizes);
 
 % %reduce the dimensions of the data
 % reduceddata = datasetnolabel(:,1:3);

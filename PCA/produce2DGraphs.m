@@ -7,7 +7,7 @@ function [covmatrix, corrmatrix, means] = produce2DGraphs(data, datacolumns, dat
   transformedspaceexclusions = {'TwoDimensionalScatterPlot_Transformed'};
   
   %define the size of the markers for the scatter plots
-  scatterplotmarkersize = 400;
+  scatterplotmarkersize = 50;
   
   %find a vector of the means of the columns of the data
   means = mean(data);
@@ -24,15 +24,19 @@ function [covmatrix, corrmatrix, means] = produce2DGraphs(data, datacolumns, dat
   exclusioncount = 2;
   
   %find the correlation b/w all columns
-  for i = 1:datacolumns
-    for j = 1:datacolumns
-      
-      covmatrix(i,j) = cov(data(:,i), data(:,j));
-
-      corrmatrix(i,j) = corr(data(:,i), data(:,j));
-      
-    end 
-  end  
+%   for i = 1:datacolumns
+%     for j = 1:datacolumns
+%       
+%       covmatrix(i,j) = cov(data(:,i), data(:,j));
+% 
+%       corrmatrix(i,j) = corr(data(:,i), data(:,j));
+%       
+%     end 
+%   end  
+    
+    covmatrix = cov(data);
+    
+    corrmatrix = corr(data);
   
   %we want all columns by all columns, but only once, so we run j to i
   for i = 1:datacolumns
@@ -40,14 +44,17 @@ function [covmatrix, corrmatrix, means] = produce2DGraphs(data, datacolumns, dat
       
       figure; 
       scatter(data(:,i), data(:,j), scatterplotmarkersize, 'r', '.');
-      xlabel(columnnames(i,1));
-      ylabel(columnnames(j,1));
+      xlabel(columnnames{i});
+      ylabel(columnnames{j});
 
-      title(strcat('2D Scatter Plot:', columnnames(i,1), '\nvs.\n', columnnames(j,1)));
+      [plottitle, ~] = sprintf('2D Scatter Plot: %s\nvs.\n%s',columnnames{i},columnnames{j});
+      
+      title(plottitle);
+      %title({strcat('2D Scatter Plot:', columnnames(i,1)), ' vs.', columnnames(j,1)});
 
       printname = genvarname('TwoDimensionalScatterPlot', originalspaceexclusions);
       originalspaceexclusions{exclusioncount} = printname;
-      exclusioncount++;
+      exclusioncount = exclusioncount + 1;
 
       print(printname, '-dpng');
 

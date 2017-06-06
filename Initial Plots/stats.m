@@ -38,7 +38,7 @@ data{2} = FWD;
 data{3} = RWD;
 
 %plot and print PDFs for the datasets
-%mypdf(data, ntypes, nfeatures, typenames, featurenames, featureunits);
+mypdf(data, ntypes, nfeatures, typenames, featurenames, featureunits);
 
 %plot and print PDFs with dot diagrams at the bottom
 pdfwithdots(data, ntypes, nfeatures, typenames, featurenames, featureunits);
@@ -52,13 +52,13 @@ end
 
 for i = 1:nfeatures
   for j = 1:nfeatures
-    FWDcov(i,j) = cov(data{1}(:,i), data{1}(:,j));
+    FWDcov(i,j) = cov(data{2}(:,i), data{2}(:,j));
   end
 end
 
 for i = 1:nfeatures
   for j = 1:nfeatures
-    RWDcov(i,j) = cov(data{1}(:,i), data{1}(:,j));
+    RWDcov(i,j) = cov(data{3}(:,i), data{3}(:,j));
   end
 end
 
