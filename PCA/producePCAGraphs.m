@@ -140,7 +140,7 @@ function producePCAGraphs(Ur, U, S, V, nfeatures, nsamples, featurenames, sizes)
   %starting unique combination values for three of the four possible principle components  
   x = 1;
   y = 2;
-  z = 2;
+  z = 3;
   i = 1;
 
   %loops through each unique combination of three of the four possible priniciple components 
